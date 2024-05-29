@@ -8,6 +8,12 @@ const base64Image = ref(null)
 const onFileChange = (event) => {
   const file = event.target.files[0]
   if (file) {
+    const validTypes = ['image/jpeg', 'image/png']
+    if (!validTypes.includes(file.type)) {
+      errorMessage.value = 'Only JPG and PNG files are allowed.'
+      base64Image.value = null
+      return
+    }
     if (file.size > MAX_FILE_SIZE) {
       errorMessage.value = 'File size exceeds 2MB limit.'
       base64Image.value = null
@@ -25,7 +31,7 @@ const onFileChange = (event) => {
 
 <template>
   <div>
-    <input type="file" @change="onFileChange" />
+    <input type="file" @change="onFileChange" accept=".jpg, .jpeg, .png" />
     <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
     <div v-if="base64Image">
       <p>Base64 Image:</p>
